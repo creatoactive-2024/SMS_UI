@@ -1,0 +1,15 @@
+.heading{
+    padding: 20PX;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    font-size: x-large;
+}
+.form-btn{
+    color: white;
+    background-color: rgb(194, 134, 38);
+}
+
+
+

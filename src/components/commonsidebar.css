@@ -1,0 +1,127 @@
+/* Add this CSS to your existing styles or create a new CSS file */
+
+/* Common styles for both collapsed and expanded state */
+.site-layout {
+    transition: margin-left 0.3s;
+  }
+  
+  /* Styles for the collapsed state */
+  .Sidebar.collapsed {
+    width: 80px;
+  }
+  
+  .Sidebar.collapsed .logo {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .Sidebar.collapsed .sidebar-wrapper {
+    text-align: center;
+  }
+
+  /* #menuMob{
+    display: none;
+  }
+   */
+  /* Media query for small screens */
+  @media (max-width: 768px) {
+    /* Hide the sidebar initially on mobile screens */
+    .Sidebar {
+      display: none;
+    }
+    aside{
+        display: none;
+    }
+    :where(.css-dev-only-do-not-override-17a39f8).ant-layout {
+        display: initial;
+    }
+    .profdetail h5{
+        display: none;
+    }
+    .profdetail p{
+        display: none;
+    }
+    .trigger{
+        position: initial !important
+    }
+
+    .profimg{
+        width: 40PX;
+    }
+
+    #menuMob{
+      display: block;
+    }
+.viewAcc{
+    overflow: hidden;
+    scroll-behavior: smooth;
+    overflow-x: scroll;
+}
+
+    /* Additional styles for the toggle button */
+    .trigger {
+      display: block;
+      font-size: 16px;
+      line-height: 64px;
+      padding: 0 24px;
+      cursor: pointer;
+      transition: color 0.3s;
+      position: fixed;
+      top: 15px;
+      left: 16px;
+      z-index: 2;
+    }
+  
+    .trigger:hover {
+      color: #1890ff;
+    }
+  
+    /* Adjust the layout when the sidebar is active on mobile screens */
+    .Sidebar.active {
+      display: block;
+      position: fixed;
+      z-index: 1;
+      height: 100%;
+      width: 200px; /* Adjust the width as needed */
+      background-color: white; /* Set the background color as needed */
+      overflow-x: hidden;
+      transition: 0.5s;
+    }
+  
+    .Sidebar.active .sidebar-menu {
+      padding-top: 60px;
+    }
+  
+    .site-layout {
+      margin-left: 200px; /* Adjust the margin as needed */
+      transition: margin-left 0.5s;
+    }
+  
+    .site-layout.collapsed {
+      margin-left: 0;
+    }
+  
+    .site-layout.collapsed .Sidebar.active {
+      width: 0;
+    }
+  }
+  
+
+
+  @media (min-width: 768px) {
+    .viewAcc{
+        overflow: hidden;
+        scroll-behavior: smooth;
+        overflow-x: scroll;
+    }
+   
+  
+  }
+
+  /* @media (min-width: 1028px) {
+  
+  #menuMob{
+
+    display: none;
+  }
+  } */

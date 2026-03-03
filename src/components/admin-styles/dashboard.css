@@ -1,0 +1,33 @@
+.container{
+    display: flex;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.box{
+    width: 400px;
+    height: 300px;
+    background-color: rgb(234, 241, 255);
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    margin: 20px;
+    padding: 50px;
+    flex-wrap: wrap;
+    border-radius: 50px;
+}
+.innerBox{
+    display: flex;
+    justify-content: center;
+    width: 250px;
+    height: 50px;
+}
+h1{
+    font-size: xx-large;
+    font-weight: 700;
+}
+p{
+    font-size: larger;
+    font-weight: 500;
+}

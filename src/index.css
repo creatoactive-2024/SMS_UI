@@ -1,0 +1,214 @@
+
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  font-family: "poppins", sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+html, body{
+  scroll-behavior: smooth;
+}
+
+
+
+body{
+  font-family: Roboto, sans-serif;
+}
+.profimg{
+  width: 32px;
+  height: 32px;
+  margin-right: 15px;
+}
+.profdetail{
+  margin-right: 20px;
+}
+.trigger{
+  padding: 0 24px;
+  font-size: 18px;
+  line-height: 64px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+.trigger:hover{
+  color: #1890ff;
+}
+.ant-btn-icon{
+  padding: 0 22px;
+  font-size: 16px;
+  line-height: 64px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+.ant-btn-icon:hover{
+  color: #1890ff;
+}
+.logo{
+  height: 32px;
+  margin: 16px;
+  background: rgba(255, 255, 255, 0.3);
+}
+.ant-btn{
+  text-decoration: none;
+}
+.ant-layout{
+  min-height: 100vh;
+  background-color:#EAF1FF ;
+}
+.ant-layout-slider{
+  flex: 0 0 250px;
+  max-width: 250px;
+  min-width: 250px;
+  width: 250px;
+}
+.ant-layout-sider-collapsed {
+  flex: 0 0 80px;
+  max-width: 80px;
+  min-width: 80px;
+  width: 80px;
+}
+.sm-logo{
+  display: none;
+}
+.ant-layout-sider-collapsed .sm-logo {
+display: block;
+}
+.ant-layout-sider-collapsed .lg-logo {
+  display: none;
+  }
+.logo{
+  background-color:black;
+  margin: 0;
+  height: 140px;
+}
+
+main{
+  overflow: scroll !important;
+}
+.ant-menu-title-content{
+  font-size: 16px;
+}
+.ant-layout-header h5 {
+  line-height: 20px;
+  font-size: 14px;
+}
+.ant-layout-header p {
+  line-height: 20px;
+  font-size: 13px;
+}
+
+
+
+
+.scroll-container {
+  max-width: 100%;
+}
+.ant-layout-sider {
+  flex: 0 0 200px;
+  max-width: 200px;
+  min-width: 230px !important;
+  width: 200px;
+}
+
+.ant-layout-sider-collapsed {
+  flex: 0 0 80px !important;
+  max-width: 80px !important;
+  min-width: 80px !important;
+  width: 80px !important;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: right;
+ 
+}
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'poppins', sans-serif;
+}
+
+html{
+  font-size: 62.5%;
+}
+
+table{
+  margin: 2rem auto;
+  border: 1rem hidden #684b3c;
+  border-collapse: collapse;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+li, p, a, td{
+  font-size: 1.6rem;
+  line-height: 1.6;
+}
+
+thead{
+  font-size: 1.8rem;
+  background-color: #544f6e;
+  color: #fff;
+}
+
+th,
+td {
+  border: 1px solid #443C68;
+   min-width: 13.5rem;
+   padding: 1.5rem; 
+  line-height: 1.7; 
+}
+
+td{
+  font-size: 1.4rem;
+}
+.done{
+  background-color: #443C68;
+  color: white;
+  border-radius: 3px;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+.edit{
+  background-color: #443C68;
+  color: white;
+  border-radius: 3px;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+.delete{
+  background-color: #443C68;
+  color: white;
+  border-radius: 3px;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+button{
+  margin-right: 20px;
+  text-decoration: none;
+  border: none;
+  font-size: 18px;
+  background-color: transparent;
+}
+.ant-layout-sider {
+  width: 600px; 
+}
+  
+  
+  /* Adjust the width value as per your requirement */
+/* Add your existing CSS styles here */
+
+.d-flex {
+  display: -webkit-box !important;
+}
+
+.align-items-center {
+  -webkit-box-align: center !important;
+}
+
