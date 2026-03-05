@@ -21,6 +21,7 @@ import {
   FiltersDropdown,
   SearchInput
 } from "../../commonComponents/ButtonsDropdown";
+import TeacherDetailsModal from "./TeacherDetailsModal";
 
 
 const { Option } = Select;
@@ -41,6 +42,11 @@ const Teacher = () => {
   const [filterValue1, setFilterValue1] = useState(null);
   const [filterValue2, setFilterValue2] = useState(null);
   const [filterValue3, setFilterValue3] = useState(null);
+
+
+    const [selectedTeacherId, setSelectedTeacherId] = useState(null);
+    const [detailsOpen, setDetailsOpen] = useState(false);
+
 
   const handleFilter1Change = (value) => {
     setFilterValue1(value);
@@ -132,41 +138,31 @@ const Teacher = () => {
       dataIndex: "name",
       key: "name",
     },
-    {
-      title: "Schools",
-      dataIndex: "schools",
-      key: "schools",
-    },
-    {
-      title: "E-mail",
-      dataIndex: "email",
-      key: "email",
-    },
-    {
-      title: "Phone",
-      dataIndex: "phone",
-      key: "phone",
-    },
-    {
-      title: "Cell phone",
-      dataIndex: "cellphone",
-      key: "cellphone",
-    },
-    {
-      title: "Cost Category",
-      dataIndex: "cost_category",
-      key: "cost_category",
-    },
+   
     {
       title: "Course Categories",
       dataIndex: "course_category_name",
       key: "course_category_name",
     },
     {
-      title: "Level",
-      dataIndex: "course_level_name",
-      key: "course_level_name",
-    },
+  title: "Level",
+  dataIndex: "course_level_name",
+  key: "course_level_name",
+  width: 180,
+  render: (text) => (
+    <div
+      style={{
+        maxWidth: 400,
+        whiteSpace: "nowrap",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+      }}
+      title={text}
+    >
+      {text}
+    </div>
+  ),
+}
 
     // ... Add more columns as needed
   ];
@@ -350,19 +346,19 @@ const Teacher = () => {
           style={{
             marginBottom: 16,
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent: "right",
             alignItems: "center",
           }}
         >
           <Space>
-            <FiltersDropdown
+            {/* <FiltersDropdown
               handleFilter1Change={handleFilter1Change}
               handleFilter2Change={handleFilter2Change}
               handleFilter3Change={handleFilter3Change}
               filterValue1={filterValue1}
               filterValue2={filterValue2}
               filterValue3={filterValue3}
-            />
+            /> */}
           </Space>
           <Space>
             <CsvExcelImport
@@ -435,7 +431,7 @@ const Teacher = () => {
           <p>Are you sure you want to delete the selected records?</p>
         </Modal>
 
-        <Spin spinning={loading}>
+        {/* <Spin spinning={loading}>
           <Table
             rowSelection={{
               selectedRowKeys,
@@ -447,8 +443,81 @@ const Teacher = () => {
             rowKey={(record) => record._id} // Use a unique key for each row
             scroll={{ x: "max-content" }}
           />
-        </Spin>
+        </Spin> */}
+
+  <Spin spinning={loading}>
+  <Table
+    rowSelection={{
+      selectedRowKeys,
+      onChange: onSelectChange,
+      fixed: true,
+    }}
+    columns={visibleColumns}
+    dataSource={transformedData}
+    rowKey={(record) => record._id}
+    scroll={{ x: "max-content" }}
+    rowClassName={(record) => {
+      let classes = "clickable-row";
+
+      if (record._id === selectedTeacherId) {
+        classes += " active-row";
+      }
+
+      if (record.status && record.status.toLowerCase().includes("trial")) {
+        classes += " trial-row";
+      }
+
+      return classes;
+    }}
+    onRow={(record) => ({
+     onDoubleClick: () => {
+  console.log("Double clicked row:", record);
+
+  setSelectedTeacherId(record._id);
+  setDetailsOpen(true);
+},
+    })}
+  />
+</Spin>
+
+
+        <TeacherDetailsModal
+          open={detailsOpen}
+          teacherId={selectedTeacherId}
+          onClose={() => {
+            setDetailsOpen(false);
+            setSelectedTeacherId(null);
+          }}
+        />
       </div>
+
+       <style>
+        {`
+  .trial-row td {
+    color: red !important;
+    font-weight: 600;
+  }
+    .clickable-row {
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.clickable-row:hover {
+  background-color: #f0f7ff !important;
+}
+
+.active-row {
+  background-color: #bae0ff !important;
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.trial-row {
+  background-color: #fff7e6 !important;
+}
+
+`}
+      </style>
     </>
   );
 };

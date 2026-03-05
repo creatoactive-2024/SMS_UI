@@ -92,31 +92,31 @@ const Personal_Details = ({ onFinish, recordData, CancelBothModel, form }) => {
         last_name: recordData.last_name,
 
         first_name: recordData.first_name,
-        gender: recordData.gender,
-        // dob: recordData.dob ? moment(recordData.dob) : null,
-        dob: formattedDob,
-        address_addon: recordData.address_addon,
-        nationality_name: recordData.nationality_name,
-        mother_tongue: recordData.mother_tongue,
-        address: recordData.address,
-        pincode: recordData.pincode,
-        city: recordData.city,
-        state: recordData.state,
-        country: recordData.country,
-        phone: recordData.phone,
-        office_phone: recordData.office_phone,
-        cellphone: recordData.cellphone,
-        fax: recordData.fax,
-        email: recordData.email,
-        skype: recordData.skype,
+        // gender: recordData.gender || null,
+        // // dob: recordData.dob ? moment(recordData.dob) : null,
+        // dob: formattedDob,
+        // address_addon: recordData.address_addon || null,
+        // nationality_name: recordData.nationality_name || null,
+        // mother_tongue: recordData.mother_tongue || null,
+        // address: recordData.address || null,
+        // pincode: recordData.pincode || null,
+        // city: recordData.city || null,
+        // state: recordData.state || null,
+        // country: recordData.country || null,
+        // phone: recordData.phone || null,
+        // office_phone: recordData.office_phone || null,
+        // cellphone: recordData.cellphone || null,
+        // fax: recordData.fax || null,
+        // email: recordData.email || null,
+        // skype: recordData.skype || null,
 
-        security_number: recordData.security_number,
-        note: recordData.note,
+        // security_number: recordData.security_number || null,
+        // note: recordData.note || null,
 
         // ... other fields
       });
 
-      document.getElementById("date-picker-teacher").value = formattedDob;
+      // document.getElementById("date-picker-teacher").value = formattedDob || null;
 
       console.log("in all data", recordData);
     }
