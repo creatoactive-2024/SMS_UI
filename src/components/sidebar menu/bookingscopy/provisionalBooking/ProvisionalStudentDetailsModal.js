@@ -1,192 +1,3 @@
-// import { Modal, Descriptions, Spin } from "antd";
-// import { useEffect, useState } from "react";
-// import axios from "axios";
-
-// const StudentDetailsModal = ({ open, studentId, onClose }) => {
-//   const [loading, setLoading] = useState(false);
-//   const [details, setDetails] = useState(null);
-
-//   useEffect(() => {
-//     if (!studentId || !open) return;
-
-//     fetchDetails();
-//   }, [studentId, open]);
-
-//   const fetchDetails = async () => {
-//     try {
-//       setLoading(true);
-//       const res = await axios.get(
-//         `https://your-api-url/get-student/${studentId}`
-//       );
-//       setDetails(res.data);
-//     } catch (error) {
-//       console.error("Failed to load student details", error);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   return (
-//     <Modal
-//       open={open}
-//       onCancel={onClose}
-//       footer={null}
-//       width={800}
-//       title="Student Details"
-//       destroyOnClose
-//     >
-//       <Spin spinning={loading}>
-//         {details && (
-//           <Descriptions bordered column={2} size="small">
-//             <Descriptions.Item label="Student ID">
-//               {details.studentid}
-//             </Descriptions.Item>
-
-//             <Descriptions.Item label="Name">
-//               {details.firstname} {details.surname}
-//             </Descriptions.Item>
-
-//             <Descriptions.Item label="Email">
-//               {details.email}
-//             </Descriptions.Item>
-
-//             <Descriptions.Item label="Phone">
-//               {details.phone}
-//             </Descriptions.Item>
-
-//             <Descriptions.Item label="Gender">
-//               {details.gender}
-//             </Descriptions.Item>
-
-//             <Descriptions.Item label="Status">
-//               {details.student_status}
-//             </Descriptions.Item>
-
-//             <Descriptions.Item label="Course">
-//               {details.course}
-//             </Descriptions.Item>
-
-//             <Descriptions.Item label="Source">
-//               {details.source}
-//             </Descriptions.Item>
-//           </Descriptions>
-//         )}
-//       </Spin>
-//     </Modal>
-//   );
-// };
-
-// export default StudentDetailsModal;
-
-
-
-
-
-
-
-// import React, { useEffect, useState } from "react";
-// import { Modal, Spin, Descriptions } from "antd";
-// import axios from "axios";
-// import baseURL from "../../../config";
-
-// const StudentDetailsModal = ({ open, studentId, onClose }) => {
-//   const [loading, setLoading] = useState(false);
-//   const [record, setRecord] = useState(null);
-
-//   useEffect(() => {
-//     if (!open || !studentId) return;
-
-//     const fetchDetails = async () => {
-//       try {
-//         setLoading(true);
-
-//         const res = await axios.post(`${baseURL}/getdata`, {
-//           collectionName: "bookinghubspotdatas",
-//           id: studentId,
-//         });
-
-//         setRecord(res.data); // full record
-//       } catch (err) {
-//         console.error("Error fetching booking details", err);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchDetails();
-//   }, [open, studentId]);
-
-//   return (
-//     <Modal
-//       title="Booking Details"
-//       open={open}
-//       onCancel={onClose}
-//       footer={null}
-//       width={1000}
-//     >
-//       <Spin spinning={loading}>
-//         {record && (
-//           <Descriptions bordered column={2} size="small">
-//             <Descriptions.Item label="Student ID">
-//               {record.studentid}
-//             </Descriptions.Item>
-
-//             <Descriptions.Item label="Name">
-//               {record.firstname} {record.surname}
-//             </Descriptions.Item>
-
-//             <Descriptions.Item label="Email">
-//               {record.email}
-//             </Descriptions.Item>
-
-//             <Descriptions.Item label="Phone">
-//               {record.phone}
-//             </Descriptions.Item>
-
-//             <Descriptions.Item label="Gender">
-//               {record.gender}
-//             </Descriptions.Item>
-
-//             <Descriptions.Item label="Status">
-//               {record.student_status}
-//             </Descriptions.Item>
-
-//             <Descriptions.Item label="Course">
-//               {record.course}
-//             </Descriptions.Item>
-
-//             <Descriptions.Item label="Level">
-//               {record.level}
-//             </Descriptions.Item>
-
-//             <Descriptions.Item label="Booking Date">
-//               {record.bookingdate}
-//             </Descriptions.Item>
-
-//             <Descriptions.Item label="Payment Method">
-//               {record.payment_method}
-//             </Descriptions.Item>
-
-//             <Descriptions.Item label="Payment Amount">
-//               {record.payment_amount}
-//             </Descriptions.Item>
-
-//             <Descriptions.Item label="Nationality">
-//               {record.nationality}
-//             </Descriptions.Item>
-
-//             <Descriptions.Item label="Country of Residence">
-//               {record.country_residence}
-//             </Descriptions.Item>
-//           </Descriptions>
-//         )}
-//       </Spin>
-//     </Modal>
-//   );
-// };
-
-// export default StudentDetailsModal;
-
 
 
 
@@ -202,7 +13,7 @@ import {
 } from "antd";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import baseURL from "../../../config";
+import baseURL from "../../commonComponents/baseURL";
 import moment from "moment";
 
 const val = (v) =>
@@ -240,7 +51,7 @@ const Section = ({ title, children }) => (
   </Card>
 );
 
-const StudentDetailsModal = ({ open, studentId, onClose }) => {
+const ProvisonalStudentDetailsModal = ({ open, studentId, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [details, setDetails] = useState(null);
 
@@ -253,7 +64,7 @@ const StudentDetailsModal = ({ open, studentId, onClose }) => {
     try {
       setLoading(true);
       const res = await axios.post(`${baseURL}/getdata`, {
-        collectionName: "bookinghubspotdatas",
+        collectionName: "provisionalbookings",
         id: studentId,
       });
       setDetails(res.data);
@@ -441,4 +252,4 @@ const StudentDetailsModal = ({ open, studentId, onClose }) => {
   );
 };
 
-export default StudentDetailsModal;
+export default ProvisonalStudentDetailsModal;

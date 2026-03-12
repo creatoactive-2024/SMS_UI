@@ -32,6 +32,7 @@
     "file-saver": "^2.0.5",
     "firebase": "^9.22.0",
     "framer-motion": "^10.12.10",
+    "html2pdf.js": "^0.14.0",
     "jquery": "^3.7.0",
     "js-file-download": "^0.4.12",
     "jspdf": "^2.5.2",

@@ -17,6 +17,11 @@ import axios from "axios";
 import { Modal } from "antd";
 import jsPDF from "jspdf";
 
+import InvoicePreviewModal from "./Invoice/InvoicePreviewModal";
+import { downloadInvoicePDF } from "./Invoice/invoicePDF";
+import InvoiceLayout from "./Invoice/InvoiceLayout";
+import html2pdf from "html2pdf.js";
+
 const { Option } = Select;
 
 const Courses = ({
@@ -59,6 +64,11 @@ const [season, setSeason] = useState(null);
 
 const [pricingRaw, setPricingRaw] = useState([]);
 const [pricingUnit, setPricingUnit] = useState(null);
+
+const [discounts, setDiscounts] = useState([]);
+const [selectedDiscount, setSelectedDiscount] = useState(null);
+const [specialDiscount, setSpecialDiscount] = useState(null);
+const invoiceRef = useRef(null);
 
 
 useEffect(() => {
@@ -155,45 +165,6 @@ const fetchPricing = async (seasonId) => {
     }
   };
 
-//  const generatePreview = async () =>
-// {
-//  try
-//  {
-
-//  const values = form.getFieldsValue(true);
-
-//  console.log("Form values:", values);
-
-//  if (!values.course || !values.no_of_weeks)
-//  {
-//   notification.warning({
-//    message: "Select course and weeks first"
-//   });
-
-//   return;
-//  }
-
-//  const res = await axios.post(
-//   `${baseURL}/invoice/preview`,
-//   {
-//    studentId: candidateId,
-
-//    courseId: values.course,  // ✅ now this will be ObjectId
-
-//    units: values.no_of_weeks
-//   }
-//  );
-
-// setInvoicePreview(res.data);
-// setInvoiceModalVisible(true);
-//  }
-//  catch(err)
-//  {
-//   notification.error({
-//    message: "Invoice preview failed"
-//   });
-//  }
-// };
 
 
 const generatePreview = async () => {
@@ -237,7 +208,11 @@ const generatePreview = async () => {
 
    hoursPerWeek: values.hours_per_week || null,
 
-   lessonsPerWeek: values.lessons_per_week || null
+   lessonsPerWeek: values.lessons_per_week || null,  
+
+   discountId: selectedDiscount !== "special discount" ? selectedDiscount : null,
+
+specialDiscount: selectedDiscount === "special discount" ? specialDiscount : null
 
   };
 
@@ -262,6 +237,30 @@ const generatePreview = async () => {
 
 };
 
+
+const fetchDiscounts = async (courseId) => {
+  try {
+
+    const res = await axios.post(`${baseURL}/active-discounts`, {
+      courseId
+    });
+
+    const list = res.data.data || [];
+
+    const formatted = list.map(d => ({
+      value: d._id,
+      label: d.name
+    }));
+
+    setDiscounts(formatted);
+
+  } catch (err) {
+
+    console.error("Discount fetch failed", err);
+    setDiscounts([]);
+
+  }
+};
 
 useEffect(() => {
 
@@ -492,33 +491,49 @@ const handleFinish = async (formValues) => {
     return `${d}/${m}/${y}`;
   };
 
+// const downloadInvoicePDF = () => {
+
+//  const doc = new jsPDF();
+
+//  doc.setFontSize(18);
+//  doc.text("SpeakUp London", 20, 20);
+
+//  doc.setFontSize(12);
+
+//  doc.text(`Invoice Number: ${invoicePreview.invoiceNumber}`, 20, 40);
+
+//  doc.text(`Student Name: ${recordData?.firstname || ""} ${recordData?.surname || ""}`, 20, 50);
+
+//  doc.text(`Course: ${courses.find(c=>c.value===form.getFieldValue("course"))?.label}`, 20, 60);
+
+//  doc.text(`Weeks: ${form.getFieldValue("no_of_weeks")}`, 20, 70);
+
+//  doc.text(`Subtotal: £${invoicePreview.subtotal}`, 20, 90);
+
+//  doc.text(`Discount: £${invoicePreview.discountAmount}`, 20, 100);
+
+//  doc.text(`Total: £${invoicePreview.total}`, 20, 110);
+
+//  doc.save(`Invoice-${invoicePreview.invoiceNumber}.pdf`);
+
+// };
+
+
 const downloadInvoicePDF = () => {
 
- const doc = new jsPDF();
+ if (!invoiceRef.current) return;
 
- doc.setFontSize(18);
- doc.text("SpeakUp London", 20, 20);
+ const opt = {
+  margin: 4,
+  filename: `Invoice-${invoicePreview.invoiceNumber}.pdf`,
+  image: { type: "jpeg", quality: 1 },
+  html2canvas: { scale: 2 },
+  jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+ };
 
- doc.setFontSize(12);
-
- doc.text(`Invoice Number: ${invoicePreview.invoiceNumber}`, 20, 40);
-
- doc.text(`Student Name: ${recordData?.firstname || ""} ${recordData?.surname || ""}`, 20, 50);
-
- doc.text(`Course: ${courses.find(c=>c.value===form.getFieldValue("course"))?.label}`, 20, 60);
-
- doc.text(`Weeks: ${form.getFieldValue("no_of_weeks")}`, 20, 70);
-
- doc.text(`Subtotal: £${invoicePreview.subtotal}`, 20, 90);
-
- doc.text(`Discount: £${invoicePreview.discountAmount}`, 20, 100);
-
- doc.text(`Total: £${invoicePreview.total}`, 20, 110);
-
- doc.save(`Invoice-${invoicePreview.invoiceNumber}.pdf`);
+ html2pdf().set(opt).from(invoiceRef.current).save();
 
 };
-
   return (
     <>
       <Form
@@ -598,21 +613,30 @@ const downloadInvoicePDF = () => {
         <Form.Item label="Course" name="course" rules={[{ required: true }]}>
 
 <Select
+onChange={(courseId) => {
 
-onChange={(courseId)=>{
+  handleCourseChange(courseId);
 
-handleCourseChange(courseId);
+  const pricing = pricingRaw.find(
+    p => p.courseId._id === courseId
+  );
 
-// ✅ detect pricingUnit
+  setPricingUnit(pricing?.pricingUnit);
 
-const pricing = pricingRaw.find(
-p => p.courseId._id === courseId
-);
+  // fetch discounts for selected course
+  fetchDiscounts(courseId);
 
-setPricingUnit(pricing?.pricingUnit);
+  // ✅ RESET DISCOUNT STATE
+  setSelectedDiscount(null);
+  setSpecialDiscount(null);
+
+  // ✅ RESET FORM FIELDS
+  form.setFieldsValue({
+    discount: undefined,
+    special_discount: undefined
+  });
 
 }}
-
 >
 
 {courses.map((name) => (
@@ -626,6 +650,61 @@ setPricingUnit(pricing?.pricingUnit);
 </Select>
 
 </Form.Item>
+
+
+<Form.Item label="Discount" name="discount">
+
+<Select
+placeholder="Select discount (optional)"
+onChange={(value)=>{
+
+setSelectedDiscount(value);
+
+if (value !== "special discount") {
+  setSpecialDiscount(null);
+
+  form.setFieldsValue({
+    special_discount: undefined
+  });
+}
+
+}}
+>
+
+{discounts.map(d => (
+
+<Option key={d.value} value={d.value}>
+{d.label}
+</Option>
+
+))}
+
+<Option value="special discount">Special discount</Option>
+
+</Select>
+
+</Form.Item>
+
+{selectedDiscount === "special discount" && (
+
+<Form.Item
+label="Special Discount Amount"
+name="special_discount"
+rules={[
+{ required:true, message:"Enter discount amount"}
+]}
+>
+
+<InputNumber
+style={{width:"100%"}}
+min={0}
+placeholder="Enter discount amount"
+onChange={(v)=>setSpecialDiscount(v)}
+/>
+
+</Form.Item>
+
+)}
 
         {/* Show subfields only if a course is selected */}
         {/* {selectedCourse && (
@@ -988,167 +1067,54 @@ rules={[{ required: true }]}
         />
       </Form>
 
-     {/* <Modal
- title="Invoice Preview"
- open={invoiceModalVisible}
- onCancel={()=>setInvoiceModalVisible(false)}
- footer={null}
- width={600}
->
+     
+{/* <InvoicePreviewModal
+ visible={invoiceModalVisible}
+ onClose={() => setInvoiceModalVisible(false)}
+ invoicePreview={invoicePreview}
+ recordData={recordData}
+ onDownload={() =>
+  downloadInvoicePDF(invoicePreview, recordData)
+ }
+/> */}
 
-<div
- style={{
-  padding:20,
-  background:"#fff",
-  border:"1px solid #ddd"
- }}
->
-
-<h2>SpeakUp London</h2>
-
-<hr/>
-
-<p><b>Invoice Number:</b> {invoicePreview?.invoiceNumber}</p>
-
-<p>
-<b>Student Name:</b> {recordData?.firstname} {recordData?.surname}
-</p>
-
-<p>
-<b>Course:</b> {courses.find(c=>c.value===form.getFieldValue("course"))?.label}
-</p>
-
-<p>
-<b>Weeks:</b> {form.getFieldValue("no_of_weeks")}
-</p>
-
-<hr/>
-
-<p>Subtotal: £{invoicePreview?.subtotal}</p>
-
-<p>Discount: £{invoicePreview?.discountAmount}</p>
-
-<h3>Total: £{invoicePreview?.total}</h3>
-
-<Button
- type="primary"
- onClick={downloadInvoicePDF}
->
- Download PDF
-</Button>
-
-</div>
-
-</Modal> */}
 
 <Modal
  title="Invoice Preview"
  open={invoiceModalVisible}
  onCancel={() => setInvoiceModalVisible(false)}
  footer={null}
- width={650}
+ width={900}
 >
 
-<div
- style={{
-  padding: 24,
-  background: "#fff",
-  border: "1px solid #ddd",
-  borderRadius: 6
- }}
->
+<div style={{display:"flex", justifyContent:"center"}}>
 
-<h2 style={{marginBottom:0}}>SpeakUp London</h2>
+<div ref={invoiceRef}>
 
-<p style={{color:"#666"}}>Official Invoice</p>
+<InvoiceLayout
+ invoicePreview={invoicePreview}
+ recordData={recordData}
+/>
 
-<hr/>
+</div>
 
-<p>
-<b>Invoice Number:</b> {invoicePreview?.invoiceNumber}
-</p>
+</div>
 
-<p>
-<b>Student Name:</b>{" "}
-{recordData?.firstname} {recordData?.surname}
-</p>
-
-<p>
-<b>Course:</b> {invoicePreview?.course}
-</p>
-
-<p>
-<b>Season:</b> {invoicePreview?.season}
-</p>
-
-<p>
-<b>Pricing Unit:</b> {invoicePreview?.pricingUnit}
-</p>
-
-<p>
-<b>Units Used:</b> {invoicePreview?.unitsUsed}
-</p>
-
-<p>
-<b>Unit Price:</b> £{invoicePreview?.unitPrice}
-</p>
-
-<hr/>
-
-<h3>Fees</h3>
-
-<p>
-Subtotal: £{invoicePreview?.subtotal}
-</p>
-
-{/* Additional Fees */}
-
-{invoicePreview?.additionalFees?.length > 0 && (
-
-<>
-<p><b>Additional Fees:</b></p>
-
-{invoicePreview.additionalFees.map((fee, index) => (
-
-<p key={index}>
-
-{fee.name}: £{fee.amount}
-
-</p>
-
-))}
-
-<p>
-
-<b>Additional Fees Total:</b> £{invoicePreview?.additionalFeesTotal}
-
-</p>
-
-</>
-
-)}
-
-<hr/>
-
-<h2>
-
-Total: £{invoicePreview?.total}
-
-</h2>
+<div style={{textAlign:"right", marginTop:20}}>
 
 <Button
  type="primary"
  onClick={downloadInvoicePDF}
- style={{marginTop:20}}
 >
-
-Download PDF
-
+Download Invoice
 </Button>
 
 </div>
 
 </Modal>
+
+
+
     </>
   );
 };

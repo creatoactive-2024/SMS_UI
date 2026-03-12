@@ -8,7 +8,8 @@ import {
   Row,
   Col,
   Typography,
-  message
+  message,
+  Input
 } from "antd";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -27,6 +28,7 @@ export default function DiscountModal({
   const [course, setCourse] = useState(null);
   const [type, setType] = useState(null);
   const [value, setValue] = useState(null);
+  const [name, setName] = useState("");
   const [validFrom, setValidFrom] = useState(null);
   const [validTo, setValidTo] = useState(null);
   const [isActive, setIsActive] = useState(true);
@@ -69,6 +71,7 @@ useEffect(() => {
 
     const payload = {
       ...(discountId && { _id: discountId }),
+       name,
       seasonId,
       courseIds,
       discountType: type,
@@ -106,6 +109,7 @@ const fetchDiscountById = async () => {
     const res = await axios.get(`${baseURL}/discountbyidToFetch/${discountId}`);
 
     const d = res.data;
+    setName(d.name);
 
     setCourseIds(d.courseIds?.map(c => c._id) || []);
 
@@ -135,6 +139,15 @@ const fetchDiscountById = async () => {
       footer={null}
       title={discountId ? "Edit Discount" : "Add Discount"}
     >
+      <Row style={{ marginBottom: 16 }}>
+  <Col span={24}>
+    <Input
+      placeholder="Discount Name"
+      value={name}
+      onChange={(e) => setName(e.target.value)}
+    />
+  </Col>
+</Row>
         <Row style={{ marginBottom: 16 }}>
   <Col span={24}>
     <Select

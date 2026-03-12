@@ -31,6 +31,7 @@ import { SaveBtn, UpdateBtn } from "../../commonComponents/ButtonsDropdown";
 import { CommonFormSubmit } from "../../commonComponents/CreateUpdateApi";
 import moment from "moment";
 import { FieldListDropdown } from "../../commonComponents/FieldListDropdown";
+import StudentDetailsModal from "../StudentDetailsModal";
 const { Option } = Select;
 
 const Booking_to_be_classed = () => {
@@ -60,6 +61,10 @@ const Booking_to_be_classed = () => {
 
   const [teacherList, setTeacherList] = useState([]);
   const [apiData, setApiData] = useState(null);
+
+ const [selectedStudentId, setSelectedStudentId] = useState(null);
+  const [detailsOpen, setDetailsOpen] = useState(false);
+
 
   const [form] = Form.useForm();
 
@@ -405,268 +410,317 @@ const Booking_to_be_classed = () => {
        fixed: "left",
        width: 0,
      },
-      {
-     title: "Status",
-     dataIndex: "student_status",
-     key: "student_status",
-   },
-   {
-     title: "Source",
-     dataIndex: "source",
-     key: "source",
-   },
+     {
+      title: "Student ID",
+      dataIndex: "studentid",
+      key: "studentid",
+      fixed: "left",
+    },
+{
+      title: "First name",
+      dataIndex: "firstname",
+      key: "firstname",
+    },
+    {
+      title: "Last name",
+      dataIndex: "surname",
+      key: "surname",
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+    },
+
+    {
+      title: "Gender",
+      dataIndex: "gender",
+      key: "gender",
+    },
+    {
+      title: "E-mail",
+      dataIndex: "email",
+      key: "email",
+    },
+    {
+      title: "Phone",
+      dataIndex: "phone",
+      key: "phone",
+    },
+
+    {
+      title: "Course",
+      dataIndex: "course",
+      key: "course",
+    },
+    {
+      title: "Source",
+      dataIndex: "source",
+      key: "source",
+    },
+
+//       {
+//      title: "Status",
+//      dataIndex: "student_status",
+//      key: "student_status",
+//    },
+//    {
+//      title: "Source",
+//      dataIndex: "source",
+//      key: "source",
+//    },
      
-  {
-   title: "Salesperson",
-   dataIndex: "salesperson",
-   key: "salesperson",
+//   {
+//    title: "Salesperson",
+//    dataIndex: "salesperson",
+//    key: "salesperson",
   
- }
- ,
-   {
-     title: "Lead",
-     dataIndex: "lead",
-     key: "lead",
-   },
-   {
-     title: "Surname",
-     dataIndex: "surname",
-     key: "surname",
-   },
-   {
-     title: "First name",
-     dataIndex: "firstname",
-     key: "firstname",
-   },
-   {
-     title: "Gender",
-     dataIndex: "gender",
-     key: "gender",
-   },
-   {
-     title: "E-mail",
-     dataIndex: "email",
-     key: "email",
-   },
-   {
-     title: "Phone",
-     dataIndex: "phone",
-     key: "phone",
-   },
-   {
-     title: "Birthdate",
-     dataIndex: "dob",
-     key: "dob",
-     render: (text, record) =>
-       record.dob ? moment(record.dob).format("DD-MM-YYYY") : "",
-   },
-   {
-     title: "Nationality",
-     dataIndex: "nationality",
-     key: "nationality",
-   },
-   {
-     title: "Country of Birth",
-     dataIndex: "country_birth",
-     key: "country_birth",
-   },
-   {
-     title: "Country of Residence",
-     dataIndex: "country_residence",
-     key: "country_residence",
-   },
-   {
-     title: "Mother tongue",
-     dataIndex: "mother_tongue",
-     key: "mother_tongue",
-   },
-   // 🔹 Address
-   {
-     title: "Address",
-     dataIndex: "address_address",
-     key: "address_address",
-   },
-   {
-     title: "ZIP / Postal code",
-     dataIndex: "address_zipcode",
-     key: "address_zipcode",
-   },
-   {
-     title: "City",
-     dataIndex: "address_city",
-     key: "address_city",
-   },
-   {
-     title: "State",
-     dataIndex: "address_state",
-     key: "address_state",
-   },
-   {
-     title: "Country",
-     dataIndex: "address_country",
-     key: "address_country",
-   },
-   // 🔹 Billing
-   {
-     title: "Billing Address",
-     dataIndex: "billing_address",
-     key: "billing_address",
-   },
-   {
-     title: "Billing ZIP",
-     dataIndex: "billing_zipcode",
-     key: "billing_zipcode",
-   },
-   {
-     title: "Billing City",
-     dataIndex: "billing_city",
-     key: "billing_city",
-   },
-   {
-     title: "Billing State",
-     dataIndex: "billing_state",
-     key: "billing_state",
-   },
-   {
-     title: "Billing Country",
-     dataIndex: "billing_country",
-     key: "billing_country",
-   },
-   // 🔹 Booking Info
-   {
-     title: "Booking Date",
-     dataIndex: "bookingdate",
-     key: "bookingdate",
-     render: (text, record) =>
-       record.bookingdate ? moment(record.bookingdate).format("DD-MM-YYYY") : "",
-   },
-   {
-     title: "Status",
-     dataIndex: "status",
-     key: "status",
-   },
-   // 🔹 Course
-   {
-     title: "Course Category",
-     dataIndex: "category",
-     key: "category",
-   },
-   {
-     title: "Course",
-     dataIndex: "course",
-     key: "course",
-   },
-   {
-     title: "Level",
-     dataIndex: "level",
-     key: "level",
-   },
-   {
-     title: "No. of Weeks",
-     dataIndex: "no_of_weeks",
-     key: "no_of_weeks",
-   },
-   {
-     title: "Course Start",
-     dataIndex: "course_from_date",
-     key: "course_from_date",
-     render: (text, record) =>
-       record.course_from_date
-         ? moment(record.course_from_date).format("DD-MM-YYYY")
-         : "",
-   },
-   {
-     title: "Course End",
-     dataIndex: "course_to_date",
-     key: "course_to_date",
-     render: (text, record) =>
-       record.course_to_date
-         ? moment(record.course_to_date).format("DD-MM-YYYY")
-         : "",
-   },
-   // 🔹 Accommodation
-   {
-     title: "Accommodation",
-     dataIndex: "accommodation",
-     key: "accommodation",
-   },
-   {
-     title: "Room",
-     dataIndex: "room",
-     key: "room",
-   },
-   {
-     title: "Board",
-     dataIndex: "board",
-     key: "board",
-   },
-   {
-     title: "Accommodation Weeks",
-     dataIndex: "no_of_weeks_accommodation",
-     key: "no_of_weeks_accommodation",
-   },
-   {
-     title: "Accommodation From",
-     dataIndex: "accommodation_from_date",
-     key: "accommodation_from_date",
-   },
-   {
-     title: "Accommodation To",
-     dataIndex: "accommodation_to_date",
-     key: "accommodation_to_date",
-   },
-   // 🔹 Visa / Passport
-   {
-     title: "Student Visa",
-     dataIndex: "student_visa",
-     key: "student_visa",
-     render: (val) => (val ? "Yes" : "No"),
-   },
-   {
-     title: "Passport Number",
-     dataIndex: "passport_number",
-     key: "passport_number",
-   },
-   {
-     title: "Passport Valid From",
-     dataIndex: "passport_from",
-     key: "passport_from",
-   },
-   {
-     title: "Passport Valid Until",
-     dataIndex: "passport_until",
-     key: "passport_until",
-   },
-   {
-     title: "Visa From",
-     dataIndex: "visa_from",
-     key: "visa_from",
-   },
-   {
-     title: "Visa Until",
-     dataIndex: "visa_until",
-     key: "visa_until",
-   },
-   {
-     title: "Visa Status",
-     dataIndex: "visa_status",
-     key: "visa_status",
-   },
-   {
-     title: "Visa Type",
-     dataIndex: "visa_type",
-     key: "visa_type",
-   },
-   {
-     title: "Payment Amount",
-     dataIndex: "payment_amount",
-     key: "payment_amount",
-   },
-   {
-     title: "Payment Method",
-     dataIndex: "payment_method",
-     key: "payment_method",
-   },
+//  }
+//  ,
+//    {
+//      title: "Lead",
+//      dataIndex: "lead",
+//      key: "lead",
+//    },
+//    {
+//      title: "Surname",
+//      dataIndex: "surname",
+//      key: "surname",
+//    },
+//    {
+//      title: "First name",
+//      dataIndex: "firstname",
+//      key: "firstname",
+//    },
+//    {
+//      title: "Gender",
+//      dataIndex: "gender",
+//      key: "gender",
+//    },
+//    {
+//      title: "E-mail",
+//      dataIndex: "email",
+//      key: "email",
+//    },
+//    {
+//      title: "Phone",
+//      dataIndex: "phone",
+//      key: "phone",
+//    },
+//    {
+//      title: "Birthdate",
+//      dataIndex: "dob",
+//      key: "dob",
+//      render: (text, record) =>
+//        record.dob ? moment(record.dob).format("DD-MM-YYYY") : "",
+//    },
+//    {
+//      title: "Nationality",
+//      dataIndex: "nationality",
+//      key: "nationality",
+//    },
+//    {
+//      title: "Country of Birth",
+//      dataIndex: "country_birth",
+//      key: "country_birth",
+//    },
+//    {
+//      title: "Country of Residence",
+//      dataIndex: "country_residence",
+//      key: "country_residence",
+//    },
+//    {
+//      title: "Mother tongue",
+//      dataIndex: "mother_tongue",
+//      key: "mother_tongue",
+//    },
+//    // 🔹 Address
+//    {
+//      title: "Address",
+//      dataIndex: "address_address",
+//      key: "address_address",
+//    },
+//    {
+//      title: "ZIP / Postal code",
+//      dataIndex: "address_zipcode",
+//      key: "address_zipcode",
+//    },
+//    {
+//      title: "City",
+//      dataIndex: "address_city",
+//      key: "address_city",
+//    },
+//    {
+//      title: "State",
+//      dataIndex: "address_state",
+//      key: "address_state",
+//    },
+//    {
+//      title: "Country",
+//      dataIndex: "address_country",
+//      key: "address_country",
+//    },
+//    // 🔹 Billing
+//    {
+//      title: "Billing Address",
+//      dataIndex: "billing_address",
+//      key: "billing_address",
+//    },
+//    {
+//      title: "Billing ZIP",
+//      dataIndex: "billing_zipcode",
+//      key: "billing_zipcode",
+//    },
+//    {
+//      title: "Billing City",
+//      dataIndex: "billing_city",
+//      key: "billing_city",
+//    },
+//    {
+//      title: "Billing State",
+//      dataIndex: "billing_state",
+//      key: "billing_state",
+//    },
+//    {
+//      title: "Billing Country",
+//      dataIndex: "billing_country",
+//      key: "billing_country",
+//    },
+//    // 🔹 Booking Info
+//    {
+//      title: "Booking Date",
+//      dataIndex: "bookingdate",
+//      key: "bookingdate",
+//      render: (text, record) =>
+//        record.bookingdate ? moment(record.bookingdate).format("DD-MM-YYYY") : "",
+//    },
+//    {
+//      title: "Status",
+//      dataIndex: "status",
+//      key: "status",
+//    },
+//    // 🔹 Course
+//    {
+//      title: "Course Category",
+//      dataIndex: "category",
+//      key: "category",
+//    },
+//    {
+//      title: "Course",
+//      dataIndex: "course",
+//      key: "course",
+//    },
+//    {
+//      title: "Level",
+//      dataIndex: "level",
+//      key: "level",
+//    },
+//    {
+//      title: "No. of Weeks",
+//      dataIndex: "no_of_weeks",
+//      key: "no_of_weeks",
+//    },
+//    {
+//      title: "Course Start",
+//      dataIndex: "course_from_date",
+//      key: "course_from_date",
+//      render: (text, record) =>
+//        record.course_from_date
+//          ? moment(record.course_from_date).format("DD-MM-YYYY")
+//          : "",
+//    },
+//    {
+//      title: "Course End",
+//      dataIndex: "course_to_date",
+//      key: "course_to_date",
+//      render: (text, record) =>
+//        record.course_to_date
+//          ? moment(record.course_to_date).format("DD-MM-YYYY")
+//          : "",
+//    },
+//    // 🔹 Accommodation
+//    {
+//      title: "Accommodation",
+//      dataIndex: "accommodation",
+//      key: "accommodation",
+//    },
+//    {
+//      title: "Room",
+//      dataIndex: "room",
+//      key: "room",
+//    },
+//    {
+//      title: "Board",
+//      dataIndex: "board",
+//      key: "board",
+//    },
+//    {
+//      title: "Accommodation Weeks",
+//      dataIndex: "no_of_weeks_accommodation",
+//      key: "no_of_weeks_accommodation",
+//    },
+//    {
+//      title: "Accommodation From",
+//      dataIndex: "accommodation_from_date",
+//      key: "accommodation_from_date",
+//    },
+//    {
+//      title: "Accommodation To",
+//      dataIndex: "accommodation_to_date",
+//      key: "accommodation_to_date",
+//    },
+//    // 🔹 Visa / Passport
+//    {
+//      title: "Student Visa",
+//      dataIndex: "student_visa",
+//      key: "student_visa",
+//      render: (val) => (val ? "Yes" : "No"),
+//    },
+//    {
+//      title: "Passport Number",
+//      dataIndex: "passport_number",
+//      key: "passport_number",
+//    },
+//    {
+//      title: "Passport Valid From",
+//      dataIndex: "passport_from",
+//      key: "passport_from",
+//    },
+//    {
+//      title: "Passport Valid Until",
+//      dataIndex: "passport_until",
+//      key: "passport_until",
+//    },
+//    {
+//      title: "Visa From",
+//      dataIndex: "visa_from",
+//      key: "visa_from",
+//    },
+//    {
+//      title: "Visa Until",
+//      dataIndex: "visa_until",
+//      key: "visa_until",
+//    },
+//    {
+//      title: "Visa Status",
+//      dataIndex: "visa_status",
+//      key: "visa_status",
+//    },
+//    {
+//      title: "Visa Type",
+//      dataIndex: "visa_type",
+//      key: "visa_type",
+//    },
+//    {
+//      title: "Payment Amount",
+//      dataIndex: "payment_amount",
+//      key: "payment_amount",
+//    },
+//    {
+//      title: "Payment Method",
+//      dataIndex: "payment_method",
+//      key: "payment_method",
+//    },
  ];
  
 
@@ -1414,7 +1468,9 @@ const Booking_to_be_classed = () => {
         >
           <p>Are you sure you want to delete the selected records?</p>
         </Modal>
-        <Spin spinning={loading}>
+
+
+        {/* <Spin spinning={loading}>
           <Table
             rowSelection={{
               selectedRowKeys,
@@ -1426,8 +1482,87 @@ const Booking_to_be_classed = () => {
             rowKey={(record) => record._id} // Use a unique key for each row
             scroll={{ x: "max-content" }}
           />
+        </Spin> */}
+
+        <Spin spinning={loading}>
+          <Table
+            rowSelection={{
+              selectedRowKeys,
+              onChange: onSelectChange,
+              fixed: true,
+            }}
+            columns={visibleColumns}
+            dataSource={data}
+            rowKey={(record) => record._id}
+            scroll={{ x: "max-content" }}
+            rowClassName={(record) => {
+              let classes = "clickable-row";
+        
+              if (record._id === selectedStudentId) {
+                classes += " active-row";
+              }
+        
+              if (record.status && record.status.toLowerCase().includes("trial")) {
+                classes += " trial-row";
+              }
+        
+              return classes;
+            }}
+            onRow={(record) => ({
+              onDoubleClick: () => {
+        
+                // Step 1: highlight row
+                setSelectedStudentId(record._id);
+        
+                // Step 2: wait for DOM paint, then open modal
+                requestAnimationFrame(() => {
+                  setTimeout(() => {
+                    setDetailsOpen(true);
+                  }, 180);
+                });
+        
+              },
+            })}
+          />
         </Spin>
+        
+        <StudentDetailsModal
+          open={detailsOpen}
+          studentId={selectedStudentId}
+          onClose={() => {
+            setDetailsOpen(false);
+            setSelectedStudentId(null);
+          }}
+        />
       </div>
+
+       <style>
+        {`
+  .trial-row td {
+    color: red !important;
+    font-weight: 600;
+  }
+    .clickable-row {
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.clickable-row:hover {
+  background-color: #f0f7ff !important;
+}
+
+.active-row {
+  background-color: #bae0ff !important;
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.trial-row {
+  background-color: #fff7e6 !important;
+}
+
+`}
+      </style>
     </>
   );
 };
